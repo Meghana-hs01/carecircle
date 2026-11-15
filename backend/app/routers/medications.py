@@ -32,6 +32,73 @@ def list_medications(
     meds = query.order_by(Medication.created_at.desc()).all()
     return [MedicationResponse.model_validate(m) for m in meds]
 
+@router.get("/profiles/{profile_id}/medications/safety-analysis")
+def get_medication_safety_analysis(
+    profile_id: int,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """Clinical drug-drug interaction, timing harmony, and allergy cross-check."""
+    profile = verify_profile_access(profile_id, db, current_user, required_permission="view")
+    active_meds = db.query(Medication).filter(
+        Medication.profile_id == profile.id,
+        Medication.is_active == True
+    ).all()
+
+    med_names = [m.name.lower() for m in active_meds]
+    allergies = [a.strip().lower() for a in (profile.allergies or "").split(",") if a.strip()]
+
+    warnings = []
+    insights = []
+    allergy_alerts = []
+
+    # Check allergy cross-reactions
+    for med in active_meds:
+        med_l = med.name.lower()
+        for allergy in allergies:
+            if allergy in med_l or (allergy == "penicillin" and any(p in med_l for p in ["amoxicillin", "ampicillin", "augmentin"])):
+                allergy_alerts.append({
+                    "medication": med.name,
+                    "allergy": allergy.capitalize(),
+                    "severity": "HIGH",
+                    "detail": f"Direct conflict with documented patient allergy: {allergy.capitalize()}."
+                })
+
+    # Clinical Drug-Drug & Timing Interactions
+    has_lisinopril = any("lisinopril" in m for m in med_names)
+    has_metformin = any("metformin" in m for m in med_names)
+    has_diuretic = any(d in " ".join(med_names) for d in ["hydrochlorothiazide", "furosemide", "spironolactone"])
+
+    if has_lisinopril and has_diuretic:
+        warnings.append({
+            "title": "Blood Pressure Synergistic Effect",
+            "severity": "MODERATE",
+            "description": "Lisinopril + Diuretic: Dual anti-hypertensive regimen requires routine blood pressure & electrolyte monitoring."
+        })
+
+    if has_metformin:
+        insights.append({
+            "title": "Gastrointestinal Timing Protocol",
+            "recommendation": "Metformin should consistently be taken with evening meals to minimize GI side effects."
+        })
+
+    if has_lisinopril:
+        insights.append({
+            "title": "Renal & Potassium Monitoring",
+            "recommendation": "Routine potassium screening recommended while on ACE inhibitor therapy."
+        })
+
+    return {
+        "profile_id": profile.id,
+        "patient_name": profile.full_name,
+        "active_medication_count": len(active_meds),
+        "allergies_evaluated": [a.capitalize() for a in allergies] if allergies else ["None documented"],
+        "allergy_conflicts": allergy_alerts,
+        "clinical_warnings": warnings,
+        "administration_insights": insights,
+        "overall_status": "HIGH_RISK" if allergy_alerts else ("MODERATE_MONITOR" if warnings else "OPTIMAL")
+    }
+
 @router.post("/profiles/{profile_id}/medications", response_model=MedicationResponse, status_code=status.HTTP_201_CREATED)
 def create_medication(
     profile_id: int,

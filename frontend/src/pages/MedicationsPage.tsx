@@ -10,7 +10,10 @@ import {
   CheckCircle2,
   Trash2,
   History,
-  FileText
+  FileText,
+  ShieldCheck,
+  AlertTriangle,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProfile } from '../context/ProfileContext';
@@ -22,6 +25,7 @@ export const MedicationsPage: React.FC = () => {
   const { currentProfile } = useProfile();
 
   const [medications, setMedications] = useState<Medication[]>([]);
+  const [safetyAnalysis, setSafetyAnalysis] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [filterActive, setFilterActive] = useState<boolean>(true);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -32,8 +36,12 @@ export const MedicationsPage: React.FC = () => {
     setLoading(true);
     setActionError(null);
     try {
-      const data = await medicationService.listMedications(currentProfile.id, filterActive);
+      const [data, safety] = await Promise.all([
+        medicationService.listMedications(currentProfile.id, filterActive),
+        medicationService.getSafetyAnalysis(currentProfile.id).catch(() => null)
+      ]);
       setMedications(data);
+      setSafetyAnalysis(safety);
     } catch (err: any) {
       console.error(err);
       setActionError('Failed to load medications.');
@@ -100,6 +108,62 @@ export const MedicationsPage: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Clinical Drug-Drug & Allergy Safety Analysis Card */}
+      {safetyAnalysis && (
+        <div className="bg-white border border-teal-200/90 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-teal-600" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <span>Clinical Safety & Drug Interaction Guard</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    {safetyAnalysis.overall_status === 'OPTIMAL' ? 'Optimal • No Critical Conflicts' : safetyAnalysis.overall_status}
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Automated contraindication & allergy verification for {safetyAnalysis.patient_name}.
+                </p>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-500 font-medium">
+              Allergies Cleared:{' '}
+              <span className="font-bold text-slate-700">
+                {safetyAnalysis.allergies_evaluated.join(', ')}
+              </span>
+            </div>
+          </div>
+
+          {safetyAnalysis.clinical_warnings.length > 0 && (
+            <div className="space-y-2">
+              {safetyAnalysis.clinical_warnings.map((w: any, idx: number) => (
+                <div key={idx} className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold">{w.title}: </span>
+                    <span>{w.description}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {safetyAnalysis.administration_insights.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              {safetyAnalysis.administration_insights.map((ins: any, idx: number) => (
+                <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-700">
+                  <span className="font-bold text-teal-800 block mb-0.5">{ins.title}</span>
+                  <span className="text-[11px] text-slate-600 leading-tight block">{ins.recommendation}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-2">

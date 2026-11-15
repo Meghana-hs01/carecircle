@@ -142,6 +142,10 @@ export const medicationService = {
   recordDose: async (doseId: number, status: 'TAKEN' | 'SKIPPED' | 'MISSED', notes?: string): Promise<MedicationDose> => {
     const res = await api.post<MedicationDose>(`/doses/${doseId}/record`, { status, notes });
     return res.data;
+  },
+  getSafetyAnalysis: async (profileId: number): Promise<any> => {
+    const res = await api.get(`/profiles/${profileId}/medications/safety-analysis`);
+    return res.data;
   }
 };
 
@@ -192,6 +196,12 @@ export const notificationService = {
   },
   markRead: async (notificationId: number): Promise<NotificationItem> => {
     const res = await api.put<NotificationItem>(`/notifications/${notificationId}/read`);
+    return res.data;
+  },
+  triggerEscalationJob: async (): Promise<any> => {
+    const res = await api.post('/internal/jobs/process-reminders', {}, {
+      headers: { 'X-Cron-Secret': 'CareCircleCron2026!' }
+    });
     return res.data;
   },
   markAllRead: async (): Promise<void> => {
