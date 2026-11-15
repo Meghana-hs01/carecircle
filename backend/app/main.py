@@ -82,8 +82,18 @@ import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist"))
-if os.path.exists(frontend_dist):
+frontend_dist_candidates = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")),
+    "/frontend/dist",
+    "/app/frontend/dist",
+]
+frontend_dist = None
+for candidate in frontend_dist_candidates:
+    if os.path.exists(candidate) and os.path.isdir(candidate):
+        frontend_dist = candidate
+        break
+
+if frontend_dist:
     assets_dir = os.path.join(frontend_dist, "assets")
     if os.path.exists(assets_dir):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
@@ -97,6 +107,11 @@ if os.path.exists(frontend_dist):
         if os.path.isfile(candidate_file):
             return FileResponse(candidate_file)
         return FileResponse(os.path.join(frontend_dist, "index.html"))
+else:
+    @app.get("/", include_in_schema=False)
+    async def root_redirect():
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/docs")
 
 if __name__ == "__main__":
     import uvicorn

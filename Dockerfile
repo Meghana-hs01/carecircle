@@ -1,16 +1,30 @@
-# CareCircle Production Backend Dockerfile for Render & Cloud Deployments
+# ==========================================
+# Stage 1: Build Frontend (Vite + React SPA)
+# ==========================================
+FROM node:20-alpine AS frontend-builder
+WORKDIR /build
+
+COPY frontend/package*.json ./
+RUN npm ci --prefer-offline --no-audit
+
+COPY frontend/ ./
+RUN npm run build
+
+# ==========================================
+# Stage 2: Production FastAPI Application
+# ==========================================
 FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies for cryptography, networking, and PostgreSQL client
+# Install system dependencies for PostgreSQL, cryptography, and networking
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install python dependencies from backend/requirements.txt
+# Install Python backend dependencies
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
@@ -18,7 +32,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy backend source code into /app
 COPY backend/ /app/
 
-# Render and Cloud Run inject dynamic $PORT (Render default is 10000, fallback to 8000)
+# Copy compiled frontend SPA into /frontend/dist so FastAPI serves it at /
+COPY --from=frontend-builder /build/dist /frontend/dist
+
+# Render & Cloud Run inject dynamic $PORT (default 10000 or 8000)
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
