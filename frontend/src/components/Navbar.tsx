@@ -36,11 +36,11 @@ export const Navbar: React.FC = () => {
     try {
       const loggedUser = await login(email, 'CareCircle2026!');
       if (loggedUser.role === 'ELDERLY') {
-        navigate('/dashboard/elderly');
+        navigate('/elderly-dashboard');
       } else if (loggedUser.role === 'FAMILY_MEMBER') {
-        navigate('/dashboard/family');
+        navigate('/family-dashboard');
       } else if (loggedUser.role === 'CARETAKER') {
-        navigate('/dashboard/caretaker');
+        navigate('/caretaker-dashboard');
       }
     } catch (err) {
       console.error('Demo switch error', err);

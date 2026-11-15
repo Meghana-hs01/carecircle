@@ -40,8 +40,11 @@ export const App: React.FC = () => {
               {/* Authenticated Protected Routes */}
               <Route element={<ProtectedLayout />}>
                 <Route path="/elderly-dashboard" element={<ElderlyDashboard />} />
+                <Route path="/dashboard/elderly" element={<ElderlyDashboard />} />
                 <Route path="/family-dashboard" element={<FamilyDashboard />} />
+                <Route path="/dashboard/family" element={<FamilyDashboard />} />
                 <Route path="/caretaker-dashboard" element={<CaretakerDashboard />} />
+                <Route path="/dashboard/caretaker" element={<CaretakerDashboard />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/medications" element={<MedicationsPage />} />
                 <Route path="/medications/new" element={<AddEditMedicationPage />} />
