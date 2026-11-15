@@ -1,0 +1,81 @@
+import logging
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from app.core.config import settings
+from app.database.session import engine, Base, SessionLocal
+from app.database.seed import seed_demo_data
+
+# Import routers
+from app.routers import (
+    health, auth, profiles, care_circle, medications,
+    appointments, care_activities, timeline, notifications,
+    analytics, jobs
+)
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: ensure tables and seed demo data
+    logger.info("Initializing database schema...")
+    Base.metadata.create_all(bind=engine)
+    
+    # Auto-seed initial demo dataset
+    db = SessionLocal()
+    try:
+        seed_demo_data(db)
+    except Exception as e:
+        logger.error(f"Error seeding demo data: {e}")
+    finally:
+        db.close()
+    
+    logger.info(f"{settings.PROJECT_NAME} v{settings.VERSION} ready.")
+    yield
+    logger.info("Shutting down CareCircle backend.")
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    description="CareCircle — Shared Healthcare Management Ecosystem for Elderly, Family & Caretakers",
+    version=settings.VERSION,
+    lifespan=lifespan
+)
+
+# CORS Configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origin_regex=r"https?://.*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Exception handlers
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception on {request.url.path}: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={"detail": "An internal server error occurred. Please try again later."}
+    )
+
+# Include Routers
+app.include_router(health.router)
+app.include_router(auth.router, prefix=settings.API_V1_STR)
+app.include_router(profiles.router, prefix=settings.API_V1_STR)
+app.include_router(care_circle.router, prefix=settings.API_V1_STR)
+app.include_router(medications.router, prefix=settings.API_V1_STR)
+app.include_router(appointments.router, prefix=settings.API_V1_STR)
+app.include_router(care_activities.router, prefix=settings.API_V1_STR)
+app.include_router(timeline.router, prefix=settings.API_V1_STR)
+app.include_router(notifications.router, prefix=settings.API_V1_STR)
+app.include_router(analytics.router, prefix=settings.API_V1_STR)
+app.include_router(jobs.router, prefix=settings.API_V1_STR)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

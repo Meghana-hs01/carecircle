@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 min-h-screen selection:bg-teal-500 selection:text-white font-sans;
+  }
+}
+
+/* Accessibility: Large Text Mode */
+html.text-lg-mode {
+  font-size: 118%;
+}
+
+html.text-lg-mode button,
+html.text-lg-mode a,
+html.text-lg-mode input,
+html.text-lg-mode select {
+  min-height: 48px;
+  font-weight: 600;
+}
+
+/* Accessibility: High Contrast Mode */
+html.high-contrast body {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast .bg-white,
+html.high-contrast .bg-slate-50,
+html.high-contrast .bg-navy-50 {
+  background-color: #121212 !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+html.high-contrast .text-slate-600,
+html.high-contrast .text-slate-500,
+html.high-contrast .text-navy-600 {
+  color: #E2E8F0 !important;
+}
+
+html.high-contrast button {
+  border: 2px solid #FFFFFF !important;
+}
+
+html.high-contrast .border-slate-200,
+html.high-contrast .border-gray-200 {
+  border-color: #FFFFFF !important;
+}
