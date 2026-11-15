@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Sparkles,
@@ -14,14 +14,31 @@ import {
   KeyRound,
   Bell,
   Eye,
-  AlertTriangle
+  AlertTriangle,
+  ShieldCheck
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProfile } from '../context/ProfileContext';
 
 export const Sidebar: React.FC = () => {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { currentProfile } = useProfile();
+  const navigate = useNavigate();
+
+  const handleDemoSwitch = async (email: string) => {
+    try {
+      const loggedUser = await login(email, 'CareCircle2026!');
+      if (loggedUser.role === 'ELDERLY') {
+        navigate('/elderly-dashboard');
+      } else if (loggedUser.role === 'FAMILY_MEMBER') {
+        navigate('/family-dashboard');
+      } else {
+        navigate('/caretaker-dashboard');
+      }
+    } catch (err) {
+      console.error('Demo switch error', err);
+    }
+  };
 
   if (!user) return null;
 
@@ -43,7 +60,8 @@ export const Sidebar: React.FC = () => {
     { label: 'Care Circle', to: '/care-circle', icon: Users2 },
     { label: 'Care Activities', to: '/activities', icon: Activity },
     { label: 'Adherence Analytics', to: '/analytics', icon: BarChart3 },
-    { label: 'Healthcare Profile', to: '/profile', icon: User },
+    { label: 'Clinical Drug Safety', to: '/medications', icon: ShieldCheck },
+    { label: 'Patient Details', to: '/profile', icon: User },
     { label: 'Join via Code', to: '/accept-invitation', icon: KeyRound },
     { label: 'Notifications', to: '/notifications', icon: Bell },
     { label: 'Accessibility', to: '/accessibility', icon: Eye },
@@ -94,15 +112,69 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Emergency Assistance Footer Banner */}
-      <div className="border-t border-slate-200 pt-4 mt-auto">
-        <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs">
-          <div className="flex items-center gap-1.5 text-rose-800 font-bold">
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
-            <span>Emergency Help</span>
+      {/* Demo Persona Switcher & Emergency Assistance */}
+      <div className="border-t border-slate-200 pt-3 mt-4 space-y-3">
+        {/* Indian Personas Quick Switcher */}
+        <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 text-xs space-y-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+            Demo Personas
+          </span>
+          <div className="grid grid-cols-1 gap-1">
+            <button
+              onClick={() => handleDemoSwitch('kausalya@carecircle.demo')}
+              className={`w-full text-left px-2 py-1 rounded text-[11px] font-bold transition flex items-center justify-between ${
+                user?.email === 'kausalya@carecircle.demo' || user?.email === 'eleanor@carecircle.demo'
+                  ? 'bg-teal-600 text-white'
+                  : 'hover:bg-slate-200 text-slate-700'
+              }`}
+            >
+              <span>Kausalya Sharma</span>
+              <span className="text-[9px] opacity-80 uppercase">Patient</span>
+            </button>
+            <button
+              onClick={() => handleDemoSwitch('pooja@carecircle.demo')}
+              className={`w-full text-left px-2 py-1 rounded text-[11px] font-bold transition flex items-center justify-between ${
+                user?.email === 'pooja@carecircle.demo' || user?.email === 'sarah@carecircle.demo'
+                  ? 'bg-teal-600 text-white'
+                  : 'hover:bg-slate-200 text-slate-700'
+              }`}
+            >
+              <span>Pooja Sharma</span>
+              <span className="text-[9px] opacity-80 uppercase">Family</span>
+            </button>
+            <button
+              onClick={() => handleDemoSwitch('rajesh@carecircle.demo')}
+              className={`w-full text-left px-2 py-1 rounded text-[11px] font-bold transition flex items-center justify-between ${
+                user?.email === 'rajesh@carecircle.demo' || user?.email === 'marcus@carecircle.demo'
+                  ? 'bg-teal-600 text-white'
+                  : 'hover:bg-slate-200 text-slate-700'
+              }`}
+            >
+              <span>Rajesh Kumar, RN</span>
+              <span className="text-[9px] opacity-80 uppercase">Nurse</span>
+            </button>
+            <button
+              onClick={() => handleDemoSwitch('ramesh@carecircle.demo')}
+              className={`w-full text-left px-2 py-1 rounded text-[11px] font-bold transition flex items-center justify-between ${
+                user?.email === 'ramesh@carecircle.demo' || user?.email === 'doctor@carecircle.demo'
+                  ? 'bg-teal-600 text-white'
+                  : 'hover:bg-slate-200 text-slate-700'
+              }`}
+            >
+              <span>Dr. Ramesh Rao, MD</span>
+              <span className="text-[9px] opacity-80 uppercase">Doctor</span>
+            </button>
           </div>
-          <p className="text-rose-700 mt-1 leading-relaxed">
-            In medical emergencies, call your local emergency services (911 / 112) immediately.
+        </div>
+
+        {/* Emergency Assistance Footer Banner */}
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-2.5 text-[11px]">
+          <div className="flex items-center gap-1.5 text-rose-800 font-bold">
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+            <span>Emergency Services</span>
+          </div>
+          <p className="text-rose-700 mt-1 leading-snug">
+            National: <span className="font-bold">112</span> | Ambulance: <span className="font-bold">108</span> | Elderline: <span className="font-bold">14567</span>
           </p>
         </div>
       </div>

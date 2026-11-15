@@ -116,20 +116,23 @@ export const CaretakerDashboard: React.FC = () => {
   }
 
   const pendingDoses = doses.filter((d) => d.status === 'UPCOMING' || d.status === 'MISSED');
+  const isDoctor = user?.email?.includes('ramesh') || user?.email?.includes('doctor') || user?.full_name?.includes('Dr.');
 
   return (
     <div className="space-y-6">
-      {/* Caretaker Header */}
+      {/* Caretaker / Physician Header */}
       <div className="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-emerald-900/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 block mb-1">
-            Clinical Caregiver Station
+            {isDoctor ? 'Attending Physician Clinical Console' : 'Clinical Caregiver Station'}
           </span>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
             Patient: {currentProfile.full_name}
           </h1>
           <p className="text-sm text-emerald-100 mt-1">
-            Logged in as {user?.full_name} • Authorised Caretaker with medication administration rights.
+            {isDoctor
+              ? `Logged in as ${user?.full_name} (Apollo Hospitals) • Clinical prescription review, contraindication monitoring & treatment oversight.`
+              : `Logged in as ${user?.full_name} • Authorised Caretaker with medication administration rights.`}
           </p>
         </div>
 
@@ -139,7 +142,7 @@ export const CaretakerDashboard: React.FC = () => {
             className="px-4 py-2.5 bg-white text-emerald-900 hover:bg-emerald-50 rounded-xl font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4 text-emerald-700" />
-            <span>Record Vitals & Care</span>
+            <span>{isDoctor ? 'Log Clinical Assessment / Vitals' : 'Record Vitals & Care'}</span>
           </button>
         </div>
       </div>

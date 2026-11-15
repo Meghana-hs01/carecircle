@@ -134,36 +134,42 @@ export const LoginPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block text-center mb-2.5">
               Instant Hackathon Demo Login
             </span>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('kausalya@carecircle.demo')}
                 disabled={loading}
-                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
+                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span className="text-lg">👵</span>
-                <span className="font-bold text-slate-900">Kausalya</span>
-                <span className="text-[10px] text-teal-700 font-semibold uppercase bg-teal-100/60 px-1.5 py-0.5 rounded">Elderly</span>
+                <span className="font-bold text-slate-900 text-xs">Kausalya</span>
+                <span className="text-[10px] text-teal-700 font-semibold uppercase bg-teal-100/60 px-1.5 py-0.5 rounded">Patient</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('pooja@carecircle.demo')}
                 disabled={loading}
-                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
+                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span className="text-lg">👩‍💼</span>
-                <span className="font-bold text-slate-900">Pooja</span>
+                <span className="font-bold text-slate-900 text-xs">Pooja</span>
                 <span className="text-[10px] text-sky-700 font-semibold uppercase bg-sky-100/60 px-1.5 py-0.5 rounded">Family</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickDemoLogin('rajesh@carecircle.demo')}
                 disabled={loading}
-                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
+                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span className="text-lg">👨‍⚕️</span>
-                <span className="font-bold text-slate-900">Rajesh</span>
+                <span className="font-bold text-slate-900 text-xs">Rajesh, RN</span>
                 <span className="text-[10px] text-emerald-700 font-semibold uppercase bg-emerald-100/60 px-1.5 py-0.5 rounded">Nurse</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickDemoLogin('ramesh@carecircle.demo')}
+                disabled={loading}
+                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
+              >
+                <span className="font-bold text-slate-900 text-xs">Dr. Ramesh</span>
+                <span className="text-[10px] text-teal-800 font-semibold uppercase bg-teal-100/60 px-1.5 py-0.5 rounded">Doctor</span>
               </button>
             </div>
           </div>

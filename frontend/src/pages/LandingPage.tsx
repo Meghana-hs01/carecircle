@@ -139,7 +139,7 @@ export const LandingPage: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Kausalya Card */}
               <button
                 type="button"
@@ -148,7 +148,7 @@ export const LandingPage: React.FC = () => {
                 className="group p-4 rounded-2xl bg-gradient-to-b from-teal-50/70 to-slate-50 hover:to-teal-100/60 border border-teal-200/80 hover:border-teal-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl">👵</span>
+                  <span className="text-xs font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded">PATIENT</span>
                   <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition">
                     Launch
                   </span>
@@ -156,7 +156,7 @@ export const LandingPage: React.FC = () => {
                 <h4 className="font-extrabold text-slate-900 text-sm">Kausalya Sharma</h4>
                 <p className="text-[11px] text-teal-700 font-semibold mb-1">Elderly Patient (Age 78)</p>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  One-tap dose checkoffs, 10-digit emergency contact (+91 9876543210), SOS alert (112 / 108).
+                  One-tap dose checkoffs, 10-digit emergency (+91 9876543210), SOS alert (112 / 108).
                 </p>
               </button>
 
@@ -168,7 +168,7 @@ export const LandingPage: React.FC = () => {
                 className="group p-4 rounded-2xl bg-gradient-to-b from-sky-50/70 to-slate-50 hover:to-sky-100/60 border border-sky-200/80 hover:border-sky-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl">👩‍💼</span>
+                  <span className="text-xs font-bold text-sky-800 bg-sky-100 px-2 py-0.5 rounded">FAMILY</span>
                   <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 group-hover:bg-sky-600 group-hover:text-white transition">
                     Launch
                   </span>
@@ -188,15 +188,35 @@ export const LandingPage: React.FC = () => {
                 className="group p-4 rounded-2xl bg-gradient-to-b from-emerald-50/70 to-slate-50 hover:to-emerald-100/60 border border-emerald-200/80 hover:border-emerald-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl">👨‍⚕️</span>
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">NURSE</span>
                   <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition">
                     Launch
                   </span>
                 </div>
                 <h4 className="font-extrabold text-slate-900 text-sm">Rajesh Kumar, RN</h4>
-                <p className="text-[11px] text-emerald-700 font-semibold mb-1">Professional Caretaker</p>
+                <p className="text-[11px] text-emerald-700 font-semibold mb-1">Clinical Caregiver</p>
                 <p className="text-[11px] text-slate-500 leading-tight">
                   Medication administration, vital signs logging, unalterable clinical audit trail.
+                </p>
+              </button>
+
+              {/* Dr. Ramesh Card */}
+              <button
+                type="button"
+                onClick={() => handleQuickLaunch('ramesh@carecircle.demo')}
+                disabled={loggingIn !== null}
+                className="group p-4 rounded-2xl bg-gradient-to-b from-teal-50/70 to-slate-50 hover:to-teal-100/60 border border-teal-200/80 hover:border-teal-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded">DOCTOR</span>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition">
+                    Launch
+                  </span>
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Dr. Ramesh Rao, MD</h4>
+                <p className="text-[11px] text-teal-700 font-semibold mb-1">Attending Physician</p>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  Apollo Hospitals geriatric consultation, contraindication review, care orders.
                 </p>
               </button>
             </div>

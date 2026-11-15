@@ -134,12 +134,12 @@ export const ProfilePage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone (10-Digit Mobile)</label>
                 <input
                   type="tel"
                   value={formData.contact_phone}
                   onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="9845012345"
                   className="w-full text-sm p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none"
                 />
               </div>
@@ -148,10 +148,15 @@ export const ProfilePage: React.FC = () => {
 
           {/* Emergency Contact */}
           <div className="pt-4 border-t border-slate-100">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-rose-700 mb-3 flex items-center gap-1.5">
-              <Phone className="w-4 h-4" />
-              Primary Emergency Contact
-            </h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
+                <Phone className="w-4 h-4" />
+                Primary Emergency Contact & Indian Helplines
+              </h2>
+              <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
+                112 • 108 Ambulance • 14567 Elderline
+              </span>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Contact Name</label>
@@ -159,17 +164,17 @@ export const ProfilePage: React.FC = () => {
                   type="text"
                   value={formData.emergency_contact_name}
                   onChange={(e) => setFormData({ ...formData, emergency_contact_name: e.target.value })}
-                  placeholder="e.g., Sarah Vance"
+                  placeholder="e.g., Pooja Sharma"
                   className="w-full text-sm p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone (10-Digit Mobile)</label>
                 <input
                   type="tel"
                   value={formData.emergency_contact_phone}
                   onChange={(e) => setFormData({ ...formData, emergency_contact_phone: e.target.value })}
-                  placeholder="+1 (555) 876-5432"
+                  placeholder="9876543210"
                   className="w-full text-sm p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none"
                 />
               </div>

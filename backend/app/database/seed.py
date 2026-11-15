@@ -47,6 +47,14 @@ def seed_demo_data(db: Session):
         phone_number="9123456789",
         is_active=True
     )
+    ramesh = User(
+        email="ramesh@carecircle.demo",
+        hashed_password=hashed_pwd,
+        full_name="Dr. Ramesh Rao, MD",
+        role=UserRole.CARETAKER,
+        phone_number="9880011223",
+        is_active=True
+    )
 
     # Legacy Aliases for Seamless Login Compatibility
     eleanor_alias = User(
@@ -73,12 +81,20 @@ def seed_demo_data(db: Session):
         phone_number="9123456789",
         is_active=True
     )
+    doctor_alias = User(
+        email="doctor@carecircle.demo",
+        hashed_password=hashed_pwd,
+        full_name="Dr. Ramesh Rao, MD",
+        role=UserRole.CARETAKER,
+        phone_number="9880011223",
+        is_active=True
+    )
 
-    db.add_all([kausalya, pooja, rajesh, eleanor_alias, sarah_alias, marcus_alias])
+    db.add_all([kausalya, pooja, rajesh, ramesh, eleanor_alias, sarah_alias, marcus_alias, doctor_alias])
     db.flush()
 
     # Preferences
-    for u in [kausalya, pooja, rajesh, eleanor_alias, sarah_alias, marcus_alias]:
+    for u in [kausalya, pooja, rajesh, ramesh, eleanor_alias, sarah_alias, marcus_alias, doctor_alias]:
         pref = NotificationPreference(
             user_id=u.id,
             email_notifications_enabled=True,
@@ -141,6 +157,14 @@ def seed_demo_data(db: Session):
         can_view_health=True,
         can_manage_care=True
     )
+    member_ramesh = CareCircleMember(
+        profile_id=profile.id,
+        user_id=ramesh.id,
+        relationship_title="Attending Physician (Apollo Hospitals)",
+        role=UserRole.CARETAKER,
+        can_view_health=True,
+        can_manage_care=True
+    )
 
     # Link aliases
     member_sarah = CareCircleMember(
@@ -159,7 +183,16 @@ def seed_demo_data(db: Session):
         can_view_health=True,
         can_manage_care=True
     )
-    db.add_all([member_pooja, member_rajesh, member_sarah, member_marcus])
+    member_doctor = CareCircleMember(
+        profile_id=profile_alias.id,
+        user_id=doctor_alias.id,
+        relationship_title="Attending Physician (Apollo Hospitals)",
+        role=UserRole.CARETAKER,
+        can_view_health=True,
+        can_manage_care=True
+    )
+
+    db.add_all([member_pooja, member_rajesh, member_ramesh, member_sarah, member_marcus, member_doctor])
 
     # 4. Medications
     med1 = Medication(
