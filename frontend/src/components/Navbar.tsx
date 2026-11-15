@@ -88,7 +88,7 @@ export const Navbar: React.FC = () => {
         )}
 
         {/* 1-Click Demo Persona Switcher (For Evaluators & Hackathon Demos) */}
-        <div className="hidden xl:flex items-center gap-1.5 bg-amber-50/90 border border-amber-200 rounded-xl px-2.5 py-1 text-xs text-amber-900 shadow-xs">
+        <div className="hidden md:flex items-center gap-1.5 bg-amber-50/90 border border-amber-200 rounded-xl px-2.5 py-1 text-xs text-amber-900 shadow-xs">
           <span className="font-bold flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-800">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Demo Persona:
           </span>

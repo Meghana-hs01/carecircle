@@ -31,10 +31,25 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const setDemoUser = (demoEmail: string) => {
+  const handleQuickDemoLogin = async (demoEmail: string) => {
     setEmail(demoEmail);
     setPassword('CareCircle2026!');
     setError(null);
+    setLoading(true);
+    try {
+      const loggedUser = await login(demoEmail, 'CareCircle2026!');
+      if (loggedUser.role === 'ELDERLY') {
+        navigate('/elderly-dashboard');
+      } else if (loggedUser.role === 'FAMILY_MEMBER') {
+        navigate('/family-dashboard');
+      } else {
+        navigate('/caretaker-dashboard');
+      }
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || 'Demo login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -122,27 +137,33 @@ export const LoginPage: React.FC = () => {
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => setDemoUser('eleanor@carecircle.demo')}
-                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1"
+                onClick={() => handleQuickDemoLogin('eleanor@carecircle.demo')}
+                disabled={loading}
+                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span>👵 Elderly</span>
-                <span className="text-[10px] text-teal-700 font-medium">Eleanor</span>
+                <span className="text-lg">👵</span>
+                <span className="font-bold text-slate-900">Eleanor</span>
+                <span className="text-[10px] text-teal-700 font-semibold uppercase bg-teal-100/60 px-1.5 py-0.5 rounded">Elderly</span>
               </button>
               <button
                 type="button"
-                onClick={() => setDemoUser('sarah@carecircle.demo')}
-                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1"
+                onClick={() => handleQuickDemoLogin('sarah@carecircle.demo')}
+                disabled={loading}
+                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span>👨‍👩‍👧 Family</span>
-                <span className="text-[10px] text-sky-700 font-medium">Sarah</span>
+                <span className="text-lg">👩‍💼</span>
+                <span className="font-bold text-slate-900">Sarah</span>
+                <span className="text-[10px] text-sky-700 font-semibold uppercase bg-sky-100/60 px-1.5 py-0.5 rounded">Family</span>
               </button>
               <button
                 type="button"
-                onClick={() => setDemoUser('marcus@carecircle.demo')}
-                className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1"
+                onClick={() => handleQuickDemoLogin('marcus@carecircle.demo')}
+                disabled={loading}
+                className="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-800 text-xs font-bold transition flex flex-col items-center gap-1 shadow-xs hover:shadow-sm disabled:opacity-50"
               >
-                <span>🩺 Nurse</span>
-                <span className="text-[10px] text-emerald-700 font-medium">Marcus</span>
+                <span className="text-lg">👨‍⚕️</span>
+                <span className="font-bold text-slate-900">Marcus</span>
+                <span className="text-[10px] text-emerald-700 font-semibold uppercase bg-emerald-100/60 px-1.5 py-0.5 rounded">Nurse</span>
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
   ShieldCheck,
@@ -10,12 +10,33 @@ import {
   Lock,
   ArrowRight,
   CheckCircle2,
-  BellRing
+  BellRing,
+  Sparkles,
+  Activity,
+  Check,
+  TrendingUp,
+  PhoneCall
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const LandingPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
+  const [loggingIn, setLoggingIn] = useState<string | null>(null);
+
+  const handleQuickLaunch = async (email: string) => {
+    setLoggingIn(email);
+    try {
+      const loggedUser = await login(email, 'CareCircle2026!');
+      if (loggedUser.role === 'ELDERLY') navigate('/elderly-dashboard');
+      else if (loggedUser.role === 'FAMILY_MEMBER') navigate('/family-dashboard');
+      else navigate('/caretaker-dashboard');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoggingIn(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
@@ -106,26 +127,86 @@ export const LandingPage: React.FC = () => {
             </Link>
           </div>
 
-          {/* Quick Demo Logins banner */}
-          <div className="mt-12 max-w-2xl mx-auto bg-white border border-slate-200 rounded-2xl p-4 shadow-sm text-left">
-            <p className="text-xs font-bold uppercase tracking-wider text-teal-800 mb-2 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-teal-600" />
-              Instant Hackathon Evaluator Credentials (Password: CareCircle2026!)
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span className="font-bold text-slate-900 block">👵 Elderly User</span>
-                <span className="text-slate-600 truncate block">eleanor@carecircle.demo</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span className="font-bold text-slate-900 block">👨‍👩‍👧 Family Member</span>
-                <span className="text-slate-600 truncate block">sarah@carecircle.demo</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span className="font-bold text-slate-900 block">🩺 Caretaker (RN)</span>
-                <span className="text-slate-600 truncate block">marcus@carecircle.demo</span>
-              </div>
+          {/* Quick 1-Click Interactive Demo Persona Cards */}
+          <div className="mt-12 max-w-3xl mx-auto bg-white/90 backdrop-blur-sm border border-slate-200/90 rounded-3xl p-6 shadow-xl shadow-teal-900/5 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <p className="text-xs font-black uppercase tracking-wider text-teal-800 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>1-Click Hackathon Evaluation Sandbox</span>
+              </p>
+              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+                No typing required • Real database session
+              </span>
             </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Eleanor Card */}
+              <button
+                type="button"
+                onClick={() => handleQuickLaunch('eleanor@carecircle.demo')}
+                disabled={loggingIn !== null}
+                className="group p-4 rounded-2xl bg-gradient-to-b from-teal-50/70 to-slate-50 hover:to-teal-100/60 border border-teal-200/80 hover:border-teal-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl">👵</span>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition">
+                    Launch
+                  </span>
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Eleanor Vance</h4>
+                <p className="text-[11px] text-teal-700 font-semibold mb-1">Elderly Individual (Age 78)</p>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  One-tap dose checkoffs, large accessible view, SOS alert.
+                </p>
+              </button>
+
+              {/* Sarah Card */}
+              <button
+                type="button"
+                onClick={() => handleQuickLaunch('sarah@carecircle.demo')}
+                disabled={loggingIn !== null}
+                className="group p-4 rounded-2xl bg-gradient-to-b from-sky-50/70 to-slate-50 hover:to-sky-100/60 border border-sky-200/80 hover:border-sky-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl">👩‍💼</span>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 group-hover:bg-sky-600 group-hover:text-white transition">
+                    Launch
+                  </span>
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Sarah Vance</h4>
+                <p className="text-[11px] text-sky-700 font-semibold mb-1">Family Care Member</p>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  14-day adherence curves, appointments, missed alerts.
+                </p>
+              </button>
+
+              {/* Marcus Card */}
+              <button
+                type="button"
+                onClick={() => handleQuickLaunch('marcus@carecircle.demo')}
+                disabled={loggingIn !== null}
+                className="group p-4 rounded-2xl bg-gradient-to-b from-emerald-50/70 to-slate-50 hover:to-emerald-100/60 border border-emerald-200/80 hover:border-emerald-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl">👨‍⚕️</span>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition">
+                    Launch
+                  </span>
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm">Marcus Chen, RN</h4>
+                <p className="text-[11px] text-emerald-700 font-semibold mb-1">Professional Caretaker</p>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  Medication administration, vital signs logging, audit trail.
+                </p>
+              </button>
+            </div>
+
+            {loggingIn && (
+              <div className="mt-3 p-2 text-center text-xs font-semibold text-teal-800 flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+                <span>Signing in as {loggingIn}...</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
