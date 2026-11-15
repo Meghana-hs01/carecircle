@@ -9,7 +9,8 @@ import {
   Users,
   ChevronDown,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -17,7 +18,7 @@ import { useProfile } from '../context/ProfileContext';
 import { notificationService } from '../services/api';
 
 export const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const { highContrast, largeText, toggleHighContrast, toggleLargeText } = useAccessibility();
   const { profiles, currentProfile, setCurrentProfileId } = useProfile();
   const [unreadCount, setUnreadCount] = useState<number>(0);
@@ -30,6 +31,21 @@ export const Navbar: React.FC = () => {
       }).catch(() => {});
     }
   }, [user]);
+
+  const handleDemoSwitch = async (email: string) => {
+    try {
+      const loggedUser = await login(email, 'CareCircle2026!');
+      if (loggedUser.role === 'ELDERLY') {
+        navigate('/dashboard/elderly');
+      } else if (loggedUser.role === 'FAMILY_MEMBER') {
+        navigate('/dashboard/family');
+      } else if (loggedUser.role === 'CARETAKER') {
+        navigate('/dashboard/caretaker');
+      }
+    } catch (err) {
+      console.error('Demo switch error', err);
+    }
+  };
 
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm" role="banner">
@@ -70,6 +86,48 @@ export const Navbar: React.FC = () => {
             </select>
           </div>
         )}
+
+        {/* 1-Click Demo Persona Switcher (For Evaluators & Hackathon Demos) */}
+        <div className="hidden xl:flex items-center gap-1.5 bg-amber-50/90 border border-amber-200 rounded-xl px-2.5 py-1 text-xs text-amber-900 shadow-xs">
+          <span className="font-bold flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-800">
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Demo Persona:
+          </span>
+          <button
+            onClick={() => handleDemoSwitch('eleanor@carecircle.demo')}
+            className={`px-2 py-0.5 rounded-md font-medium transition ${
+              user?.email === 'eleanor@carecircle.demo'
+                ? 'bg-amber-600 text-white font-bold shadow-xs'
+                : 'hover:bg-amber-100 text-amber-900'
+            }`}
+            title="Instant Switch to Eleanor Vance (Elderly Persona)"
+          >
+            👵 Elderly
+          </button>
+          <span className="text-amber-300">|</span>
+          <button
+            onClick={() => handleDemoSwitch('sarah@carecircle.demo')}
+            className={`px-2 py-0.5 rounded-md font-medium transition ${
+              user?.email === 'sarah@carecircle.demo'
+                ? 'bg-amber-600 text-white font-bold shadow-xs'
+                : 'hover:bg-amber-100 text-amber-900'
+            }`}
+            title="Instant Switch to Sarah Vance (Family Member Persona)"
+          >
+            👩‍💼 Family
+          </button>
+          <span className="text-amber-300">|</span>
+          <button
+            onClick={() => handleDemoSwitch('marcus@carecircle.demo')}
+            className={`px-2 py-0.5 rounded-md font-medium transition ${
+              user?.email === 'marcus@carecircle.demo'
+                ? 'bg-amber-600 text-white font-bold shadow-xs'
+                : 'hover:bg-amber-100 text-amber-900'
+            }`}
+            title="Instant Switch to Marcus Chen, RN (Caretaker Persona)"
+          >
+            👨‍⚕️ Caretaker
+          </button>
+        </div>
 
         {/* Action Controls & User menu */}
         <div className="flex items-center gap-2 sm:gap-3">

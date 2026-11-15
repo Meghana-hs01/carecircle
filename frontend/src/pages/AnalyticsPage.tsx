@@ -6,7 +6,9 @@ import {
   AlertTriangle,
   Clock,
   Info,
-  Calendar
+  Calendar,
+  Download,
+  Printer
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -43,6 +45,33 @@ export const AnalyticsPage: React.FC = () => {
 
   const adherenceRate = stats?.adherence_percentage ?? 100;
 
+  const handleExportCSV = () => {
+    if (!stats || stats.daily_trends.length === 0) return;
+    const headers = ['Date', 'Adherence_Percentage', 'Taken_Doses', 'Missed_Doses', 'Skipped_Doses'];
+    const rows = stats.daily_trends.map((t) => [
+      t.date,
+      `${t.adherence_percentage}%`,
+      t.taken,
+      t.missed,
+      t.skipped,
+    ]);
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    const safeName = (currentProfile?.full_name || 'patient').replace(/\s+/g, '_');
+    link.setAttribute('download', `carecircle_adherence_${safeName}_${windowDays}d.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -56,16 +85,34 @@ export const AnalyticsPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <select
             value={windowDays}
             onChange={(e) => setWindowDays(Number(e.target.value))}
-            className="text-xs font-bold p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="text-xs font-bold p-2.5 bg-white border border-slate-200 rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-teal-500"
           >
             <option value={7}>Last 7 Days</option>
             <option value={14}>Last 14 Days</option>
             <option value={30}>Last 30 Days</option>
           </select>
+
+          <button
+            onClick={handleExportCSV}
+            title="Download CSV report"
+            className="px-3.5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1.5"
+          >
+            <Download className="w-4 h-4 text-teal-600" />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            onClick={handlePrint}
+            title="Print Clinical Summary"
+            className="px-3.5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1.5"
+          >
+            <Printer className="w-4 h-4" />
+            <span className="hidden sm:inline">Print Report</span>
+          </button>
         </div>
       </div>
 
