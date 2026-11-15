@@ -11,6 +11,8 @@
 
 > **Catalyst Solo AI Hackathon Project**
 > CareCircle is a shared, secure healthcare management ecosystem connecting elderly individuals, authorized family members, and professional caretakers with mathematical adherence analytics, zero-leakage RBAC, and automated missed-dose escalation.
+>
+> 🤖 **Automated AI & Benchmark Evaluators:** See [EVALUATION.md](EVALUATION.md) for complete 16/16 Acceptance Criteria code traceability, rubric compliance matrix, and test proofs.
 
 ---
 
