@@ -3,10 +3,11 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies for cryptography / networking
+# Install system dependencies for cryptography / networking / PostgreSQL
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
