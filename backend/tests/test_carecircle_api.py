@@ -263,3 +263,25 @@ def test_cloud_scheduler_job_endpoint():
     )
     assert good_cron.status_code == 200
     assert good_cron.json()["status"] == "success"
+
+def test_ai_care_assistant():
+    auth_res = client.post("/api/auth/login", json={"email": "test.elderly@example.com", "password": "Password123!"})
+    headers = {"Authorization": f"Bearer {auth_res.json()['access_token']}"}
+    profile_id = 1
+
+    # Test medication query
+    q_res = client.post(
+        "/api/ai/query",
+        json={"profile_id": profile_id, "query": "What medicine do I take next?"},
+        headers=headers
+    )
+    assert q_res.status_code == 200
+    assert "answer" in q_res.json()
+    assert "suggested_actions" in q_res.json()
+
+    # Test weekly AI digest
+    digest_res = client.get(f"/api/ai/summary/{profile_id}", headers=headers)
+    assert digest_res.status_code == 200
+    assert "executive_summary" in digest_res.json()
+    assert "recommendations" in digest_res.json()
+    assert digest_res.json()["adherence_rate"] >= 0.0

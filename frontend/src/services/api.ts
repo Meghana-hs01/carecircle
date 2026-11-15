@@ -216,6 +216,31 @@ export const analyticsService = {
   }
 };
 
+export const aiService = {
+  query: async (profileId: number, query: string): Promise<{
+    answer: string;
+    suggested_actions: string[];
+    context_data: Record<string, any>;
+  }> => {
+    const res = await api.post('/ai/query', { profile_id: profileId, query });
+    return res.data;
+  },
+  getWeeklySummary: async (profileId: number): Promise<{
+    profile_id: number;
+    patient_name: string;
+    generated_at: string;
+    adherence_rate: number;
+    executive_summary: string;
+    medication_status: string;
+    vitals_assessment: string;
+    upcoming_events_notice: string;
+    recommendations: string[];
+  }> => {
+    const res = await api.get(`/ai/summary/${profileId}`);
+    return res.data;
+  }
+};
+
 export const schedulerService = {
   triggerReminders: async (): Promise<any> => {
     const res = await api.post('/internal/jobs/process-reminders', {}, {

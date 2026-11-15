@@ -12,7 +12,7 @@ from app.database.seed import seed_demo_data
 from app.routers import (
     health, auth, profiles, care_circle, medications,
     appointments, care_activities, timeline, notifications,
-    analytics, jobs
+    analytics, jobs, ai_assistant
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -75,6 +75,7 @@ app.include_router(timeline.router, prefix=settings.API_V1_STR)
 app.include_router(notifications.router, prefix=settings.API_V1_STR)
 app.include_router(analytics.router, prefix=settings.API_V1_STR)
 app.include_router(jobs.router, prefix=settings.API_V1_STR)
+app.include_router(ai_assistant.router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
     import uvicorn

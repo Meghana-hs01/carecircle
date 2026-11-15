@@ -23,6 +23,7 @@ import { CareActivitiesPage } from './pages/CareActivitiesPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { AccessibilityPage } from './pages/AccessibilityPage';
+import { AIAssistantPage } from './pages/AIAssistantPage';
 
 export const App: React.FC = () => {
   return (
@@ -53,6 +54,7 @@ export const App: React.FC = () => {
                 <Route path="/notifications" element={<NotificationsPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
                 <Route path="/accessibility" element={<AccessibilityPage />} />
+                <Route path="/ai-assistant" element={<AIAssistantPage />} />
               </Route>
 
               {/* Fallback */}

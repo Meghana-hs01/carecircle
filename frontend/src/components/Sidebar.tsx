@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
+  Sparkles,
   Clock,
   Pill,
   History,
@@ -34,6 +35,7 @@ export const Sidebar: React.FC = () => {
 
   const navItems = [
     { label: 'Dashboard', to: dashboardPath, icon: LayoutDashboard },
+    { label: 'AI Assistant', to: '/ai-assistant', icon: Sparkles },
     { label: 'Care Timeline', to: '/timeline', icon: Clock },
     { label: 'Medications', to: '/medications', icon: Pill },
     { label: 'Dose History', to: '/medication-history', icon: History },

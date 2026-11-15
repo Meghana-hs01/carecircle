@@ -1,4 +1,4 @@
-﻿# CareCircle PowerShell One-Click Launch Script
+# CareCircle PowerShell One-Click Launch Script
 Write-Host "========================================================" -ForegroundColor Cyan
 Write-Host " CareCircle — Better Care. Together." -ForegroundColor Cyan
 Write-Host " Starting Backend (FastAPI) and Frontend (Vite + React)" -ForegroundColor Cyan
