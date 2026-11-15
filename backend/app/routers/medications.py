@@ -46,7 +46,7 @@ def get_medication_safety_analysis(
     ).all()
 
     med_names = [m.name.lower() for m in active_meds]
-    allergies = [a.strip().lower() for a in (profile.allergies or "").split(",") if a.strip()]
+    allergies = [a.strip().lower() for a in (profile.known_allergies or "").split(",") if a.strip()]
 
     warnings = []
     insights = []

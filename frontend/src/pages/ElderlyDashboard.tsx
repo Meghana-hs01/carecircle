@@ -107,31 +107,56 @@ export const ElderlyDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Emergency Contact Banner */}
-      {currentProfile?.emergency_contact_phone && (
-        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-rose-600/20">
-              <PhoneCall className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-800 block">
+      {/* Emergency Contact & Indian Emergency Services Banner */}
+      <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-rose-600/20">
+            <PhoneCall className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-rose-800">
                 Primary Emergency Contact
               </span>
-              <p className="text-sm font-bold text-slate-900">
-                {currentProfile.emergency_contact_name} ({currentProfile.emergency_contact_relation || 'Family'})
-              </p>
+              <span className="text-[10px] bg-rose-200/80 text-rose-900 font-bold px-2 py-0.5 rounded-full">
+                National Helpline: 112 • Elderline: 14567
+              </span>
             </div>
+            <p className="text-sm font-bold text-slate-900">
+              {currentProfile?.emergency_contact_name || 'Pooja Sharma (Daughter)'} ({currentProfile?.emergency_contact_relation || 'Daughter'})
+            </p>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          {/* Family Phone Call Button (10-Digit) */}
           <a
-            href={`tel:${currentProfile.emergency_contact_phone}`}
-            className="w-full sm:w-auto px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md shadow-rose-600/20 transition flex items-center justify-center gap-2"
+            href={`tel:${currentProfile?.emergency_contact_phone || '9876543210'}`}
+            className="flex-1 md:flex-initial px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md shadow-rose-600/20 transition flex items-center justify-center gap-2"
           >
             <PhoneCall className="w-4 h-4" />
-            <span>Call {currentProfile.emergency_contact_phone}</span>
+            <span>Call {currentProfile?.emergency_contact_phone || '9876543210'}</span>
+          </a>
+
+          {/* National Ambulance Call (108) */}
+          <a
+            href="tel:108"
+            className="px-3 py-2.5 bg-white hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs"
+            title="Call National Ambulance 108"
+          >
+            <span>🚑 108 Ambulance</span>
+          </a>
+
+          {/* Senior Helpline Elderline (14567) */}
+          <a
+            href="tel:14567"
+            className="px-3 py-2.5 bg-white hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs"
+            title="Senior Citizen Elderline 14567"
+          >
+            <span>🛡️ 14567 Elderline</span>
           </a>
         </div>
-      )}
+      </div>
 
       {/* Main Grid: Today's Medications & Quick Summaries */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

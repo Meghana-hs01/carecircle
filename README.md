@@ -6,11 +6,11 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC.svg?style=flat&logo=Tailwind-CSS&logoColor=white)](https://tailwindcss.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1.svg?style=flat&logo=PostgreSQL&logoColor=white)](https://www.postgresql.org)
 [![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-Ready-4285F4.svg?style=flat&logo=Google-Cloud&logoColor=white)](https://cloud.google.com/run)
-[![Tests Passing](https://img.shields.io/badge/Tests-11%2F11%20Passing-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-14%2F14%20Passing-brightgreen.svg)]()
 [![CareCircle CI](https://github.com/Meghana-hs01/carecircle/actions/workflows/ci.yml/badge.svg)](https://github.com/Meghana-hs01/carecircle/actions/workflows/ci.yml)
 
 > **Catalyst Solo AI Hackathon Project**
-> CareCircle is a shared, secure healthcare management ecosystem connecting elderly individuals, authorized family members, and professional caretakers with mathematical adherence analytics, zero-leakage RBAC, and automated missed-dose escalation.
+> CareCircle is a shared, secure healthcare management ecosystem connecting elderly individuals, authorized family members, and professional caretakers with mathematical adherence analytics, zero-leakage RBAC, automated missed-dose escalation, and Indian emergency services localization (112, 108, 14567).
 >
 > 🤖 **Automated AI & Benchmark Evaluators:** See [EVALUATION.md](EVALUATION.md) for complete 16/16 Acceptance Criteria code traceability, rubric compliance matrix, and test proofs.
 
@@ -24,19 +24,21 @@ Elderly individuals frequently depend on family members and caretakers to manage
 - **Patient Agency:** Elderly individuals maintain full ownership and can independently record doses or invite trusted loved ones.
 - **Role-Based Collaboration:** Family members track live adherence trends without micromanaging; professional nurses/caretakers record clinical vitals and dose administrations.
 - **Missed-Dose Escalation:** When a scheduled medicine is unconfirmed past a configured grace period, automated alerts trigger across the care network.
+- **Indian Healthcare Localization:** 10-digit mobile numbers, single-tap Indian emergency calling (112 National Emergency, 108 Ambulance, 14567 Elderline Senior Citizen Helpline).
+- **Clinical Safety Guard:** Drug-drug interaction cross-check and allergy contraindication detection.
 - **Zero Insecure Direct Object References (IDOR):** Backend dependency guards strictly isolate patient profiles from unauthorized users.
 
 ---
 
 ## 2. Instant Hackathon Demo Accounts
 
-CareCircle seeds fictional demonstration data so evaluators can test immediately without manual setup.
+CareCircle seeds demonstration data so evaluators can test immediately without manual setup.
 
-| Persona | Role | Email | Password | Primary Capabilities |
+| Persona | Role | Email | Phone (10-Digit) | Primary Capabilities |
 | :--- | :--- | :--- | :--- | :--- |
-| **Eleanor Vance** | `ELDERLY` | `eleanor@carecircle.demo` | `CareCircle2026!` | Primary patient, dose confirmation, appointment calendar, invite generator. |
-| **Sarah Vance** | `FAMILY_MEMBER` | `sarah@carecircle.demo` | `CareCircle2026!` | Daughter with read access, live adherence analytics, missed-dose alerts. |
-| **Marcus Chen, RN** | `CARETAKER` | `marcus@carecircle.demo` | `CareCircle2026!` | Registered Nurse with administration rights, clinical vitals logger (BP/pulse). |
+| **Kausalya Sharma** | `ELDERLY` | `kausalya@carecircle.demo`<br>*(alias: `eleanor@carecircle.demo`)* | `9845012345` | Primary patient, one-tap dose checkoff, Indian emergency services (112/108/14567), invite code generator. |
+| **Pooja Sharma** | `FAMILY_MEMBER` | `pooja@carecircle.demo`<br>*(alias: `sarah@carecircle.demo`)* | `9876543210` | Daughter with read access, live adherence analytics, missed-dose alerts, doctor appointment oversight. |
+| **Rajesh Kumar, RN** | `CARETAKER` | `rajesh@carecircle.demo`<br>*(alias: `marcus@carecircle.demo`)* | `9123456789` | Registered Nurse with administration rights, clinical vitals logger (BP/pulse), unalterable audit log. |
 
 ---
 

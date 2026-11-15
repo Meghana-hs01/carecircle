@@ -285,3 +285,62 @@ def test_ai_care_assistant():
     assert "executive_summary" in digest_res.json()
     assert "recommendations" in digest_res.json()
     assert digest_res.json()["adherence_rate"] >= 0.0
+
+def test_clinical_safety_and_drug_interaction_guard():
+    auth_res = client.post("/api/auth/login", json={"email": "test.elderly@example.com", "password": "Password123!"})
+    assert auth_res.status_code == 200
+    headers = {"Authorization": f"Bearer {auth_res.json()['access_token']}"}
+
+    # Fetch safety analysis
+    safety_res = client.get("/api/profiles/1/medications/safety-analysis", headers=headers)
+    assert safety_res.status_code == 200
+    data = safety_res.json()
+    assert "patient_name" in data
+    assert "allergies_evaluated" in data
+    assert "clinical_warnings" in data
+    assert "administration_insights" in data
+    assert data["overall_status"] in ["OPTIMAL", "MODERATE_MONITOR", "HIGH_RISK"]
+
+def test_indian_persona_and_10_digit_phones():
+    reg_res = client.post("/api/auth/register", json={
+        "email": "kausalya.sharma@example.com",
+        "password": "Password123!",
+        "full_name": "Kausalya Sharma",
+        "role": "ELDERLY",
+        "phone_number": "9845012345"
+    })
+    assert reg_res.status_code == 201
+    headers = {"Authorization": f"Bearer {reg_res.json()['access_token']}"}
+
+    # Get profile ID
+    profiles_res = client.get("/api/profiles", headers=headers)
+    assert profiles_res.status_code == 200
+    target_id = profiles_res.json()[0]["id"]
+
+    profile_res = client.put(f"/api/profiles/{target_id}", json={
+        "full_name": "Kausalya Sharma",
+        "contact_phone": "9845012345",
+        "emergency_contact_name": "Pooja Sharma (Daughter)",
+        "emergency_contact_phone": "9876543210",
+        "emergency_contact_relation": "Daughter"
+    }, headers=headers)
+    assert profile_res.status_code == 200
+    p = profile_res.json()
+    assert p["full_name"] == "Kausalya Sharma"
+    assert p["contact_phone"] == "9845012345"
+    assert p["emergency_contact_phone"] == "9876543210"
+
+def test_notification_preferences_and_audit_trail():
+    auth_res = client.post("/api/auth/login", json={"email": "test.elderly@example.com", "password": "Password123!"})
+    assert auth_res.status_code == 200
+    headers = {"Authorization": f"Bearer {auth_res.json()['access_token']}"}
+
+    # Get notification preferences
+    pref_res = client.get("/api/notification-preferences", headers=headers)
+    assert pref_res.status_code == 200
+    assert pref_res.json()["grace_period_minutes"] >= 15
+
+    # Update grace period
+    update_res = client.put("/api/notification-preferences", json={"grace_period_minutes": 45}, headers=headers)
+    assert update_res.status_code == 200
+    assert update_res.json()["grace_period_minutes"] == 45

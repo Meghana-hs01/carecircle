@@ -140,10 +140,10 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {/* Eleanor Card */}
+              {/* Kausalya Card */}
               <button
                 type="button"
-                onClick={() => handleQuickLaunch('eleanor@carecircle.demo')}
+                onClick={() => handleQuickLaunch('kausalya@carecircle.demo')}
                 disabled={loggingIn !== null}
                 className="group p-4 rounded-2xl bg-gradient-to-b from-teal-50/70 to-slate-50 hover:to-teal-100/60 border border-teal-200/80 hover:border-teal-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
@@ -153,17 +153,17 @@ export const LandingPage: React.FC = () => {
                     Launch
                   </span>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm">Eleanor Vance</h4>
-                <p className="text-[11px] text-teal-700 font-semibold mb-1">Elderly Individual (Age 78)</p>
+                <h4 className="font-extrabold text-slate-900 text-sm">Kausalya Sharma</h4>
+                <p className="text-[11px] text-teal-700 font-semibold mb-1">Elderly Patient (Age 78)</p>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  One-tap dose checkoffs, large accessible view, SOS alert.
+                  One-tap dose checkoffs, 10-digit emergency contact (+91 9876543210), SOS alert (112 / 108).
                 </p>
               </button>
 
-              {/* Sarah Card */}
+              {/* Pooja Card */}
               <button
                 type="button"
-                onClick={() => handleQuickLaunch('sarah@carecircle.demo')}
+                onClick={() => handleQuickLaunch('pooja@carecircle.demo')}
                 disabled={loggingIn !== null}
                 className="group p-4 rounded-2xl bg-gradient-to-b from-sky-50/70 to-slate-50 hover:to-sky-100/60 border border-sky-200/80 hover:border-sky-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
@@ -173,17 +173,17 @@ export const LandingPage: React.FC = () => {
                     Launch
                   </span>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm">Sarah Vance</h4>
-                <p className="text-[11px] text-sky-700 font-semibold mb-1">Family Care Member</p>
+                <h4 className="font-extrabold text-slate-900 text-sm">Pooja Sharma</h4>
+                <p className="text-[11px] text-sky-700 font-semibold mb-1">Family Member (Daughter)</p>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  14-day adherence curves, appointments, missed alerts.
+                  Live adherence analytics, Apollo Hospital appointment tracking, missed alerts.
                 </p>
               </button>
 
-              {/* Marcus Card */}
+              {/* Rajesh Card */}
               <button
                 type="button"
-                onClick={() => handleQuickLaunch('marcus@carecircle.demo')}
+                onClick={() => handleQuickLaunch('rajesh@carecircle.demo')}
                 disabled={loggingIn !== null}
                 className="group p-4 rounded-2xl bg-gradient-to-b from-emerald-50/70 to-slate-50 hover:to-emerald-100/60 border border-emerald-200/80 hover:border-emerald-400 text-left transition shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50"
               >
@@ -193,10 +193,10 @@ export const LandingPage: React.FC = () => {
                     Launch
                   </span>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm">Marcus Chen, RN</h4>
+                <h4 className="font-extrabold text-slate-900 text-sm">Rajesh Kumar, RN</h4>
                 <p className="text-[11px] text-emerald-700 font-semibold mb-1">Professional Caretaker</p>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  Medication administration, vital signs logging, audit trail.
+                  Medication administration, vital signs logging, unalterable clinical audit trail.
                 </p>
               </button>
             </div>

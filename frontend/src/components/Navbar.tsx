@@ -93,39 +93,39 @@ export const Navbar: React.FC = () => {
             <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Demo Persona:
           </span>
           <button
-            onClick={() => handleDemoSwitch('eleanor@carecircle.demo')}
+            onClick={() => handleDemoSwitch('kausalya@carecircle.demo')}
             className={`px-2 py-0.5 rounded-md font-medium transition ${
-              user?.email === 'eleanor@carecircle.demo'
+              user?.email === 'kausalya@carecircle.demo' || user?.email === 'eleanor@carecircle.demo'
                 ? 'bg-amber-600 text-white font-bold shadow-xs'
                 : 'hover:bg-amber-100 text-amber-900'
             }`}
-            title="Instant Switch to Eleanor Vance (Elderly Persona)"
+            title="Instant Switch to Kausalya Sharma (Elderly Persona)"
           >
-            👵 Elderly
+            👵 Kausalya (Elderly)
           </button>
           <span className="text-amber-300">|</span>
           <button
-            onClick={() => handleDemoSwitch('sarah@carecircle.demo')}
+            onClick={() => handleDemoSwitch('pooja@carecircle.demo')}
             className={`px-2 py-0.5 rounded-md font-medium transition ${
-              user?.email === 'sarah@carecircle.demo'
+              user?.email === 'pooja@carecircle.demo' || user?.email === 'sarah@carecircle.demo'
                 ? 'bg-amber-600 text-white font-bold shadow-xs'
                 : 'hover:bg-amber-100 text-amber-900'
             }`}
-            title="Instant Switch to Sarah Vance (Family Member Persona)"
+            title="Instant Switch to Pooja Sharma (Family Member Persona)"
           >
-            👩‍💼 Family
+            👩‍💼 Pooja (Family)
           </button>
           <span className="text-amber-300">|</span>
           <button
-            onClick={() => handleDemoSwitch('marcus@carecircle.demo')}
+            onClick={() => handleDemoSwitch('rajesh@carecircle.demo')}
             className={`px-2 py-0.5 rounded-md font-medium transition ${
-              user?.email === 'marcus@carecircle.demo'
+              user?.email === 'rajesh@carecircle.demo' || user?.email === 'marcus@carecircle.demo'
                 ? 'bg-amber-600 text-white font-bold shadow-xs'
                 : 'hover:bg-amber-100 text-amber-900'
             }`}
-            title="Instant Switch to Marcus Chen, RN (Caretaker Persona)"
+            title="Instant Switch to Rajesh Kumar, RN (Caretaker Persona)"
           >
-            👨‍⚕️ Caretaker
+            👨‍⚕️ Rajesh (Nurse)
           </button>
         </div>
 

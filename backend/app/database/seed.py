@@ -22,36 +22,63 @@ def seed_demo_data(db: Session):
     print("Seeding fictional demo data...")
     hashed_pwd = get_password_hash("CareCircle2026!")
 
-    # 1. Users
-    eleanor = User(
+    # 1. Users (Authentic Indian Healthcare Personas)
+    kausalya = User(
+        email="kausalya@carecircle.demo",
+        hashed_password=hashed_pwd,
+        full_name="Kausalya Sharma",
+        role=UserRole.ELDERLY,
+        phone_number="9845012345",
+        is_active=True
+    )
+    pooja = User(
+        email="pooja@carecircle.demo",
+        hashed_password=hashed_pwd,
+        full_name="Pooja Sharma",
+        role=UserRole.FAMILY_MEMBER,
+        phone_number="9876543210",
+        is_active=True
+    )
+    rajesh = User(
+        email="rajesh@carecircle.demo",
+        hashed_password=hashed_pwd,
+        full_name="Rajesh Kumar, RN",
+        role=UserRole.CARETAKER,
+        phone_number="9123456789",
+        is_active=True
+    )
+
+    # Legacy Aliases for Seamless Login Compatibility
+    eleanor_alias = User(
         email="eleanor@carecircle.demo",
         hashed_password=hashed_pwd,
-        full_name="Eleanor Vance",
+        full_name="Kausalya Sharma",
         role=UserRole.ELDERLY,
-        phone_number="+1 (555) 234-5678",
+        phone_number="9845012345",
         is_active=True
     )
-    sarah = User(
+    sarah_alias = User(
         email="sarah@carecircle.demo",
         hashed_password=hashed_pwd,
-        full_name="Sarah Vance",
+        full_name="Pooja Sharma",
         role=UserRole.FAMILY_MEMBER,
-        phone_number="+1 (555) 876-5432",
+        phone_number="9876543210",
         is_active=True
     )
-    marcus = User(
+    marcus_alias = User(
         email="marcus@carecircle.demo",
         hashed_password=hashed_pwd,
-        full_name="Marcus Chen, RN",
+        full_name="Rajesh Kumar, RN",
         role=UserRole.CARETAKER,
-        phone_number="+1 (555) 432-1098",
+        phone_number="9123456789",
         is_active=True
     )
-    db.add_all([eleanor, sarah, marcus])
+
+    db.add_all([kausalya, pooja, rajesh, eleanor_alias, sarah_alias, marcus_alias])
     db.flush()
 
     # Preferences
-    for u in [eleanor, sarah, marcus]:
+    for u in [kausalya, pooja, rajesh, eleanor_alias, sarah_alias, marcus_alias]:
         pref = NotificationPreference(
             user_id=u.id,
             email_notifications_enabled=True,
@@ -61,42 +88,78 @@ def seed_demo_data(db: Session):
         )
         db.add(pref)
 
-    # 2. Elderly Profile
+    # 2. Elderly Profile (Kausalya Sharma)
     profile = ElderlyProfile(
-        user_id=eleanor.id,
-        full_name="Eleanor Vance",
+        user_id=kausalya.id,
+        full_name="Kausalya Sharma",
         date_of_birth=date(1948, 6, 15),
         gender="Female",
-        contact_phone="+1 (555) 234-5678",
-        emergency_contact_name="Sarah Vance (Daughter)",
-        emergency_contact_phone="+1 (555) 876-5432",
+        contact_phone="9845012345",
+        emergency_contact_name="Pooja Sharma (Daughter)",
+        emergency_contact_phone="9876543210",
         emergency_contact_relation="Daughter",
-        medical_conditions="Essential Hypertension, Type 2 Diabetes, Mild Osteoarthritis (Right Knee)",
-        known_allergies="Penicillin (Moderate rash), Shellfish",
+        medical_conditions="Essential Hypertension, Type 2 Diabetes Mellitus, Mild Osteoarthritis (Right Knee)",
+        known_allergies="Penicillin (Moderate skin rash), Dust",
         important_notes="Prefers taking evening medicines immediately after dinner. Walks with a supportive cane for long distances.",
         profile_image_url="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=256"
     )
     db.add(profile)
     db.flush()
 
+    # Profile alias for eleanor_alias as well
+    profile_alias = ElderlyProfile(
+        user_id=eleanor_alias.id,
+        full_name="Kausalya Sharma",
+        date_of_birth=date(1948, 6, 15),
+        gender="Female",
+        contact_phone="9845012345",
+        emergency_contact_name="Pooja Sharma (Daughter)",
+        emergency_contact_phone="9876543210",
+        emergency_contact_relation="Daughter",
+        medical_conditions="Essential Hypertension, Type 2 Diabetes Mellitus, Mild Osteoarthritis (Right Knee)",
+        known_allergies="Penicillin (Moderate skin rash), Dust",
+        important_notes="Prefers taking evening medicines immediately after dinner.",
+        profile_image_url="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=256"
+    )
+    db.add(profile_alias)
+    db.flush()
+
     # 3. Care Circle Memberships
-    member_sarah = CareCircleMember(
+    member_pooja = CareCircleMember(
         profile_id=profile.id,
-        user_id=sarah.id,
+        user_id=pooja.id,
+        relationship_title="Daughter",
+        role=UserRole.FAMILY_MEMBER,
+        can_view_health=True,
+        can_manage_care=False
+    )
+    member_rajesh = CareCircleMember(
+        profile_id=profile.id,
+        user_id=rajesh.id,
+        relationship_title="Primary Caretaker (RN)",
+        role=UserRole.CARETAKER,
+        can_view_health=True,
+        can_manage_care=True
+    )
+
+    # Link aliases
+    member_sarah = CareCircleMember(
+        profile_id=profile_alias.id,
+        user_id=sarah_alias.id,
         relationship_title="Daughter",
         role=UserRole.FAMILY_MEMBER,
         can_view_health=True,
         can_manage_care=False
     )
     member_marcus = CareCircleMember(
-        profile_id=profile.id,
-        user_id=marcus.id,
+        profile_id=profile_alias.id,
+        user_id=marcus_alias.id,
         relationship_title="Primary Caretaker (RN)",
         role=UserRole.CARETAKER,
         can_view_health=True,
         can_manage_care=True
     )
-    db.add_all([member_sarah, member_marcus])
+    db.add_all([member_pooja, member_rajesh, member_sarah, member_marcus])
 
     # 4. Medications
     med1 = Medication(
@@ -106,8 +169,8 @@ def seed_demo_data(db: Session):
         frequency="ONCE_DAILY",
         scheduled_times=["08:00"],
         start_date=date.today() - timedelta(days=30),
-        prescribing_doctor="Dr. Robert Hayes",
-        instructions="Take 1 tablet in the morning with a full glass of water. Monitor blood pressure weekly.",
+        prescribing_doctor="Dr. Arvind Swaminathan",
+        instructions="Take 1 tablet in the morning with water. Monitor blood pressure weekly.",
         is_active=True
     )
     med2 = Medication(
@@ -117,7 +180,7 @@ def seed_demo_data(db: Session):
         frequency="TWICE_DAILY",
         scheduled_times=["08:00", "20:00"],
         start_date=date.today() - timedelta(days=30),
-        prescribing_doctor="Dr. Angela Thorne",
+        prescribing_doctor="Dr. Suresh Varma",
         instructions="Take with meals to avoid gastrointestinal upset.",
         is_active=True
     )
@@ -128,8 +191,8 @@ def seed_demo_data(db: Session):
         frequency="ONCE_DAILY",
         scheduled_times=["20:00"],
         start_date=date.today() - timedelta(days=30),
-        prescribing_doctor="Dr. Robert Hayes",
-        instructions="Take 1 tablet every evening before bed.",
+        prescribing_doctor="Dr. Arvind Swaminathan",
+        instructions="Take 1 tablet every evening after dinner.",
         is_active=True
     )
     db.add_all([med1, med2, med3])
@@ -149,7 +212,7 @@ def seed_demo_data(db: Session):
         if idx % 7 == 0:
             d.status = DoseStatus.SKIPPED
             d.notes = "Patient reported mild nausea; consulted doctor and skipped dose."
-            d.recorded_by_id = marcus.id
+            d.recorded_by_id = rajesh.id
         elif idx % 9 == 0:
             d.status = DoseStatus.MISSED
             d.escalated = True
@@ -157,14 +220,14 @@ def seed_demo_data(db: Session):
         else:
             d.status = DoseStatus.TAKEN
             d.actual_time = d.scheduled_time + timedelta(minutes=10)
-            d.recorded_by_id = eleanor.id if idx % 2 == 0 else marcus.id
+            d.recorded_by_id = kausalya.id if idx % 2 == 0 else rajesh.id
 
     # 5. Appointments
     today = date.today()
     appt1 = Appointment(
         profile_id=profile.id,
-        doctor_name="Robert Hayes, MD (Cardiologist)",
-        hospital_clinic="St. Jude Medical Pavilion, Suite 402",
+        doctor_name="Dr. Arvind Swaminathan, MD (Cardiologist)",
+        hospital_clinic="Apollo Hospitals, Bannerghatta Road, Bengaluru",
         appointment_date=today + timedelta(days=3),
         appointment_time="10:30",
         purpose="Quarterly Blood Pressure & ACE Inhibitor Review",
@@ -173,8 +236,8 @@ def seed_demo_data(db: Session):
     )
     appt2 = Appointment(
         profile_id=profile.id,
-        doctor_name="Anita Desai, OD",
-        hospital_clinic="Vision First Optometry Clinic",
+        doctor_name="Dr. Anita Desai, MS (Ophthalmology)",
+        hospital_clinic="Narayana Nethralaya Eye Care, Bengaluru",
         appointment_date=today + timedelta(days=12),
         appointment_time="14:00",
         purpose="Annual Diabetic Retinopathy Screening",
@@ -183,8 +246,8 @@ def seed_demo_data(db: Session):
     )
     appt3 = Appointment(
         profile_id=profile.id,
-        doctor_name="Angela Thorne, MD (Endocrinologist)",
-        hospital_clinic="University Health Center",
+        doctor_name="Dr. Suresh Varma, MD (Endocrinologist)",
+        hospital_clinic="Manipal Hospital, Old Airport Road, Bengaluru",
         appointment_date=today - timedelta(days=14),
         appointment_time="09:15",
         purpose="HbA1c Routine Check",
@@ -196,7 +259,7 @@ def seed_demo_data(db: Session):
     # 6. Care Activities
     act1 = CareActivity(
         profile_id=profile.id,
-        recorded_by_id=marcus.id,
+        recorded_by_id=rajesh.id,
         activity_type="VITALS",
         activity_time=datetime.now(timezone.utc) - timedelta(hours=3),
         title="Morning Blood Pressure & Heart Rate",
@@ -205,7 +268,7 @@ def seed_demo_data(db: Session):
     )
     act2 = CareActivity(
         profile_id=profile.id,
-        recorded_by_id=marcus.id,
+        recorded_by_id=rajesh.id,
         activity_type="VITALS",
         activity_time=datetime.now(timezone.utc) - timedelta(hours=4),
         title="Fasting Blood Glucose",
@@ -214,7 +277,7 @@ def seed_demo_data(db: Session):
     )
     act3 = CareActivity(
         profile_id=profile.id,
-        recorded_by_id=marcus.id,
+        recorded_by_id=rajesh.id,
         activity_type="MOBILITY",
         activity_time=datetime.now(timezone.utc) - timedelta(days=1, hours=2),
         title="Afternoon Physical Therapy & Garden Walk",
@@ -225,7 +288,7 @@ def seed_demo_data(db: Session):
 
     # 7. Notifications
     notif1 = Notification(
-        user_id=eleanor.id,
+        user_id=kausalya.id,
         profile_id=profile.id,
         type=NotificationType.MEDICATION_REMINDER,
         title="Upcoming Medication: Lisinopril 20mg",
@@ -236,11 +299,11 @@ def seed_demo_data(db: Session):
         sent_at=datetime.now(timezone.utc) - timedelta(hours=5)
     )
     notif2 = Notification(
-        user_id=marcus.id,
+        user_id=rajesh.id,
         profile_id=profile.id,
         type=NotificationType.APPOINTMENT_REMINDER,
         title="Upcoming Appointment Reminder",
-        message=f"Reminder: Eleanor Vance has an appointment with Dr. Robert Hayes in 3 days ({appt1.appointment_date}).",
+        message=f"Reminder: Kausalya Sharma has an appointment with Dr. Arvind Swaminathan in 3 days ({appt1.appointment_date}).",
         is_read=False,
         email_sent=False,
         email_delivery_status=DeliveryStatus.SKIPPED_NO_CREDENTIALS,
