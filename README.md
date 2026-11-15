@@ -6,7 +6,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC.svg?style=flat&logo=Tailwind-CSS&logoColor=white)](https://tailwindcss.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1.svg?style=flat&logo=PostgreSQL&logoColor=white)](https://www.postgresql.org)
 [![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-Ready-4285F4.svg?style=flat&logo=Google-Cloud&logoColor=white)](https://cloud.google.com/run)
-[![Tests Passing](https://img.shields.io/badge/Tests-10%2F10%20Passing-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-11%2F11%20Passing-brightgreen.svg)]()
+[![CareCircle CI](https://github.com/Meghana-hs01/carecircle/actions/workflows/ci.yml/badge.svg)](https://github.com/Meghana-hs01/carecircle/actions/workflows/ci.yml)
 
 > **Catalyst Solo AI Hackathon Project**
 > CareCircle is a shared, secure healthcare management ecosystem connecting elderly individuals, authorized family members, and professional caretakers with mathematical adherence analytics, zero-leakage RBAC, and automated missed-dose escalation.
